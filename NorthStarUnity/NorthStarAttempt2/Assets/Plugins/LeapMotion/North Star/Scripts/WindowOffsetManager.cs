@@ -59,7 +59,7 @@ namespace Leap.Unity.AR {
       }
     }
 
-    IEnumerator Position() {
+        IEnumerator Position() {
       Screen.fullScreen = false;
       Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
       yield return new WaitForSeconds(2f);

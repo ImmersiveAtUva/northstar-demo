@@ -19,7 +19,13 @@ namespace Leap.Unity.AR {
     const int UNITY_MENU_HEIGHT_POSITION = 12;
     EditorWindow headsetView, calibrationView;
 
-    public override void OnInspectorGUI() {
+        public void OnEnable() {
+            System.Type gameViewType = System.Type.GetType("UnityEditor.GameView,UnityEditor");
+            target.enabled = true;
+            LayoutViews(gameViewType);
+        }
+
+        public override void OnInspectorGUI() {
       base.OnInspectorGUI();
 
       System.Type gameViewType = System.Type.GetType("UnityEditor.GameView,UnityEditor");
