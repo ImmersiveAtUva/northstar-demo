@@ -13,6 +13,8 @@ namespace Leap.Unity.AR {
   //[ExecuteInEditMode]
   public class IPDAdjuster : MonoBehaviour {
 
+        public float disOff = 5f;
+
     [Header("IPD")]
     public float ipd = 0.064f;
     public float heightOffset = 0f;
@@ -138,17 +140,17 @@ namespace Leap.Unity.AR {
         }
 
         if (Input.GetKey(adjustTrackerHigherKey)){// || Input.GetAxis("joystick button 0")) {
-          pitchOffset -= 20f * Time.deltaTime;
+          pitchOffset -= disOff * Time.deltaTime;
         }
         if (Input.GetKey(adjustTrackerLowerKey)) {
-          pitchOffset += 20f * Time.deltaTime;
+          pitchOffset += disOff * Time.deltaTime;
         }
 
         if (Input.GetKey(adjustTrackerRightKey)) {
-          yawOffset += 20f * Time.deltaTime;
+          yawOffset += disOff * Time.deltaTime;
         }
         if (Input.GetKey(adjustTrackerLeftKey)) {
-          yawOffset -= 20f * Time.deltaTime;
+          yawOffset -= disOff * Time.deltaTime;
         }
 
         /*if (Input.GetKey(screenForwardKey)) {
