@@ -36,47 +36,34 @@ namespace Leap.Unity.AR {
     public int xShift = 1920;
     [Tooltip("Shift the window (Y coord) to the AR headset monitor.")]
     public int yShift = 0;
+    public bool robustFullScreen = false;
 
     public static void SetPosition(int x, int y, int resX = 0, int resY = 0) {
       SetWindowPos(FindWindow(null, Application.productName), 0, x, y, resX, resY, resX * resY == 0 ? 1 : 0);
     }
 
     void Awake() {
-      if (GetComponent<CalibrationWindowOffset>() != null) enabled = false;
-      if (Application.isPlaying && !Application.isEditor) {
+      if (Application.isPlaying) {
         Application.targetFrameRate = 120;
-
-        if (Config.TryRead<int>("windowManagerXShift", ref xShift)) {
-          Debug.Log("Loaded X shift from Config: " + xShift);
-        }
-
-        if (!enabled) { return; }
-        if (!Screen.fullScreen) {
-          StartCoroutine(Position());
-        } else {
-          SetPosition(xShift, 0, 2880, 1600);
-        }
+        StartCoroutine(Position());
       }
     }
 
-        IEnumerator Position() {
-      Screen.fullScreen = false;
-      Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
-      yield return new WaitForSeconds(2f);
-      SetPosition(xShift, 0, 2880, 1600);
-      yield return new WaitForSeconds(1f);
-      Screen.fullScreen = true;
-      yield return new WaitForSeconds(1f);
-      //if (SystemInfo.graphicsDeviceType ==
-      //    UnityEngine.Rendering.GraphicsDeviceType.Direct3D11) {
-      //  Application.Quit();
-      //}
-      yield return null;
+    IEnumerator Position() {
+      if (robustFullScreen) {
+        Screen.fullScreen = false;
+        yield return new WaitForSeconds(2f);
+      }
 
+      SetPosition(xShift, 0, 2160, 1200);
+      if (robustFullScreen) {
+        yield return new WaitForSeconds(1f);
+        Screen.fullScreen = true;
+      }
+      yield return null;
     }
 
     private void Update() {
-      if (!enabled) { return; }
       if (Application.isPlaying) {
         if (Input.GetKeyDown(KeyCode.V)) {
           if (Application.targetFrameRate == -1000) {
